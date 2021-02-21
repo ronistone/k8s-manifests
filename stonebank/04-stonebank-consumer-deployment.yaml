@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stonebank-consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stonebank-consumer
+  template:
+    metadata:
+      labels:
+        app: stonebank-consumer
+    spec:
+      containers:
+        - name: stonebank-consumer
+          image: ronistone/stonebank-consumer:0.0.13
+          imagePullPolicy: "Always"
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: stonebank-config
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 15
+          startupProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            failureThreshold: 5
+            periodSeconds: 20

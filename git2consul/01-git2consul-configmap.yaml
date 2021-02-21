@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: git2consul-config
+  labels:
+    app: git2consul
+data:
+  CFG: |
+    {
+      "version": "1.0",
+      "logger" : {
+          "name" : "config",
+          "streams" : [{
+            "level": "trace",
+            "stream": "process.stdout"
+          },
+          {
+            "level": "debug",
+            "type": "rotating-file",
+            "path": "/var/log/git2consul/git2consul.log"
+          }]
+      },
+      "repos" : [{
+        "name" : "config",
+        "url" : "https://github.com/ronistone/stonebank-properties.git",
+        "include_branch_name" : false,
+        "branches" : ["master"],
+        "hooks": [{
+          "type" : "polling",
+          "interval" : "1"
+        }]
+      }]
+    }

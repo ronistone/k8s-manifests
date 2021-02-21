@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: stonebank-consumer
+  labels:
+    app: stonebank-consumer
+spec:
+  type: ClusterIP
+  ports:
+    - name: web
+      port: 8080
+  selector:
+    app: stonebank-consumer
