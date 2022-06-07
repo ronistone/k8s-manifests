@@ -1,0 +1,7 @@
+grafana:
+  ingress:
+    enabled: true
+    annotations:
+        nginx.ingress.kubernetes.io/rewrite-target: /
+    hosts:
+      - grafana.local

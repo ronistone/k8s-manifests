@@ -1,14 +1,15 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: stonebank-processor
+  name: stonebank-consumer
+  namespace: stonebank
   labels:
-    app: stonebank-processor
+    app: stonebank-consumer
     release: prometheus-stack
 spec:
   selector:
     matchLabels:
-      app: stonebank-processor
+      app: stonebank-consumer
   namespaceSelector:
     any: true
   endpoints:
