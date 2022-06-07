@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lab-java
+  namespace: lab
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lab-java
+  template:
+    metadata:
+      labels:
+        app: lab-java
+    spec:
+      containers:
+        - name: lab-java
+          image: ronistone/lab-java:0.0.1
+          imagePullPolicy: "Always"
+          ports:
+            - containerPort: 8080
+            - containerPort: 8081
+            - containerPort: 8082
+          command:
+            - "java"
+          args: [ "-jar", "-Dcom.sun.management.jmxremote=true", "-Dcom.sun.management.jmxremote.authenticate=false", "-Djava.rmi.server.hostname=localhost", "-Dcom.sun.management.jmxremote.local.only=false", "-Dcom.sun.management.jmxremote.port=8081", "-Dcom.sun.management.jmxremote.rmi.port=8081", "-Dcom.sun.management.jmxremote.ssl=false", "./app.jar" ]
+          envFrom:
+            - configMapRef:
+                name: lab-config
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 15
+          startupProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            failureThreshold: 5
+            periodSeconds: 20
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "1Gi"
+            requests:
+              cpu: "100m"

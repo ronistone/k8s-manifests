@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lab-kotlin
+  namespace: lab
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lab-kotlin
+  template:
+    metadata:
+      labels:
+        app: lab-kotlin
+    spec:
+      containers:
+        - name: lab-kotlin
+          image: ronistone/lab-kotlin:0.0.1
+          imagePullPolicy: "Always"
+          ports:
+            - containerPort: 8080
+            - containerPort: 8081
+            - containerPort: 8082
+          envFrom:
+            - configMapRef:
+                name: lab-config
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 15
+          startupProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            failureThreshold: 5
+            periodSeconds: 20
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "1Gi"
+            requests:
+              cpu: "100m"

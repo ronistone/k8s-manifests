@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: lab-config
+  namespace: lab
+  labels:
+    app: lab
+data:
+  SPRING_DATASOURCE_URL: jdbc:postgresql://postgres.default:5432/lab
+  SPRING_DATASOURCE_USERNAME: lab
+  SPRING_DATASOURCE_PASSWORD: lab
+  SERVER_PORT: "8080"
+  SPRING_JMX_ENABLED: "true"
+  SPRING_DATASOURCE_HIKARI_MAXIMUMPOOLSIZE: "20"

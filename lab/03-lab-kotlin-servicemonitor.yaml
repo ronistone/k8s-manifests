@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: lab-kotlin
+  namespace: lab
+  labels:
+    app: lab-kotlin
+    release: prometheus-stack
+spec:
+  selector:
+    matchLabels:
+      app: lab-kotlin
+  namespaceSelector:
+    any: true
+  endpoints:
+    - port: web
+      path: /actuator/prometheus
+      interval: 10s
