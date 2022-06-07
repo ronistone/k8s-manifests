@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: private-repository-k8s
+  labels:
+    app: private-repository-k8s
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: private-repository-k8s
+  template:
+    metadata:
+      labels:
+        app: private-repository-k8s
+    spec:
+      containers:
+        - name: private-repository-k8s
+          image: registry:2
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: REGISTRY_HTTP_ADDR
+              value: ":5000"
+            - name: REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY
+              value: "/var/lib/registry"
+          resources:
+            limits:
+              cpu: "100m"
+              memory: "512Mi"
+          ports:
+            - containerPort: 5000
+          volumeMounts:
+          - name: repo-vol
+            mountPath: /var/lib/registry
+      volumes:
+        - name: repo-vol
+          persistentVolumeClaim:
+            claimName: docker-repo-pvc

@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata: 
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+    # kubernetes.io/tls-acme: 'true'
+  name: chat-ingress
+spec: 
+  ingressClassName: nginx
+  rules: 
+    - 
+      host: chat.lab.k8s.local
+      http: 
+        paths: 
+          - 
+            backend: 
+              service:
+                name: distributed-chat
+                port: 
+                  number: 8080
+            path: /
+            pathType: Prefix
+  # tls: 
+  #   - 
+  #     hosts: 
+  #       - chat.lab.k8s.local
+  #     secretName: ingress-tls-secret

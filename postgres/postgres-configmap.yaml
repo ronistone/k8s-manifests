@@ -5,6 +5,7 @@ metadata:
   labels:
     app: postgres
 data:
-  POSTGRES_DB: stonebank
-  POSTGRES_USER: stonebank
-  POSTGRES_PASSWORD: stonebank
+  # POSTGRES_DB: stonebank
+  POSTGRES_USER: admin
+  POSTGRES_PASSWORD: admin
+  POSTGRES_MULTIPLE_DATABASES: "lab,lab,lab:stonebank,stonebank,stonebank:chat,chat,chat"

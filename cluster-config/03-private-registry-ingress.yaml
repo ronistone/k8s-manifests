@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata: 
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+    # kubernetes.io/tls-acme: 'true'
+  name: registry-ingress
+spec: 
+  ingressClassName: nginx
+  rules: 
+    - 
+      host: registry.lab.k8s.local
+      http: 
+        paths: 
+          - 
+            backend: 
+              service:
+                name: private-repository-k8s
+                port: 
+                  number: 5000
+            path: /
+            pathType: Prefix
+  # tls: 
+  #   - 
+  #     hosts: 
+  #       - registry.lab.k8s.local
+  #     secretName: registry-tls-secret

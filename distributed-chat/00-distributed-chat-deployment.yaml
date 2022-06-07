@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: distributed-chat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: distributed-chat
+  template:
+    metadata:
+      labels:
+        app: distributed-chat
+    spec:
+      containers:
+        - name: distributed-chat
+          image: registry.lab.k8s.local/distributed-chat:latest
+          imagePullPolicy: "Always"
+          ports:
+            - containerPort: 8080
+            - containerPort: 8081
+            # - containerPort: 8082
+          env:
+            - name: DATABASE_HOST
+              value: "postgres.default"
+            - name: DATABASE_PORT
+              value: "5432"
+            - name: DATABASE_USER
+              value: "chat"
+            - name: DATABASE_PASSWORD
+              value: "chat"
+            - name: REDIS_HOST
+              value: "redis.default:6379"
+            - name: CLUSTER_DISCOVERY_DNS
+              value: "distributed-chat-headless.default.svc.cluster.local"
+            - name: HOSTNAME
+              value: "chat"
+
+          # livenessProbe:
+          #   httpGet:
+          #     path: /actuator/health
+          #     port: 8080
+          #   initialDelaySeconds: 20
+          #   periodSeconds: 15
+          # startupProbe:
+          #   httpGet:
+          #     path: /actuator/health
+          #     port: 8080
+          #   failureThreshold: 5
+          #   periodSeconds: 20
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "1Gi"
+            requests:
+              cpu: "100m"
